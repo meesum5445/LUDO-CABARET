@@ -36,5 +36,51 @@
     <ClInclude Include="Board.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Controller_Class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ludo_Cabaret.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility_Functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Board.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Home.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ludo_Cabaret.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Piece.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility_Functions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="dice_1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="dice_2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="dice_3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="dice_4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="dice_5.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="dice_6.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

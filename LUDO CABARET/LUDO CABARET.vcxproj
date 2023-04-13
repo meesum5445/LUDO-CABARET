@@ -129,11 +129,29 @@
   <ItemGroup>
     <ClInclude Include="All_forward_declarations.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Controller_Class.h" />
     <ClInclude Include="Dice.h" />
     <ClInclude Include="Home.h" />
+    <ClInclude Include="Ludo_Cabaret.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Team.h" />
+    <ClInclude Include="Utility_Functions.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Home.cpp" />
+    <ClCompile Include="Ludo_Cabaret.cpp" />
+    <ClCompile Include="Piece.cpp" />
+    <ClCompile Include="Utility_Functions.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="dice_1.png" />
+    <Image Include="dice_2.png" />
+    <Image Include="dice_3.png" />
+    <Image Include="dice_4.png" />
+    <Image Include="dice_5.png" />
+    <Image Include="dice_6.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
