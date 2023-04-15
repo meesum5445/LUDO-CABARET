@@ -14,10 +14,10 @@ using namespace std;
 #include"Ludo_Cabaret.h"
 //...Class/Header file  to be defined here...//
 #include"Player.h"
-Player::Player(Team *team,int starting_location,string name,Controller_Class* controller):team(team),starting_location(starting_location),name(name), controller(controller)
+Player::Player(Team* team, int starting_location, string name, Controller_Class* controller) :team(team), starting_location(starting_location), name(name), controller(controller)
 {
 	this->controller->players.push_back(this);				//Adding itself to controllers class.
-	this->team->players.push_back(this);	
+	this->team->players.push_back(this);
 }
 void Player::roll()
 {
@@ -42,11 +42,11 @@ void Player::roll()
 		i++;
 		this->controller->ludo_cabaret->display();
 	} while (roll_results[i - 1] == 6);
-			
+
 }
 int Player::index_of_six()
 {
-	for (int result_index=0; result_index<this->roll_results.size(); result_index++)
+	for (int result_index = 0; result_index < this->roll_results.size(); result_index++)
 	{
 		if (this->roll_results[result_index] == 6)
 			return result_index;
@@ -55,7 +55,7 @@ int Player::index_of_six()
 }
 int Player::our_piece_index(int source)
 {
-	for (int i=0; i < this->controller->board->path[source].size(); i++)
+	for (int i = 0; i < this->controller->board->path[source].size(); i++)
 	{
 		if (this->controller->board->path[source][i]->home->player->team == this->team)
 		{
@@ -66,13 +66,8 @@ int Player::our_piece_index(int source)
 }
 int Player::our_piece_index_local_path(int source)
 {
-	for (int i = 0; i < this->home->local_path[source].size(); i++)
-	{
-		if (this->home->local_path[source][i]->home->player->team == this->team)
-		{
-			return i;
-		}
-	}
+	if (this->home->local_path[source].size() > 0)
+		return 0;
 	return -1;
 }
 bool Player::valid_destination(int destination)
@@ -109,9 +104,9 @@ int Player::select_dice_number()
 	positionOnWindow pos = get_row_col_by_click(*this->controller->ludo_cabaret->ludo_window);
 	for (int i = 0; i < this->roll_results.size(); i++)
 	{
-		if (pos.row >= 300 && pos.row <= 400 && pos.col >= 1080 + i * 110 && pos.col <= 1080 + i * 110 + 100)		
+		if (pos.row >= 300 && pos.row <= 400 && pos.col >= 1080 + i * 110 && pos.col <= 1080 + i * 110 + 100)
 			return i;
-					
+
 	}
 	return -1;
 }
@@ -161,14 +156,14 @@ void Player::take_out_piece()
 			piece->out_of_home = true;
 			return;
 		}
-			
-	}	
-	
+
+	}
+
 
 }
-void Player::kill(Position source,Position destination)
+void Player::kill(Position source, Position destination)
 {
-	if (destination.path_index % 13==0 || this->controller->ludo_cabaret->wrap_around_destination_index(destination.path_index+4)%13==0)
+	if (destination.path_index % 13 == 0 || this->controller->ludo_cabaret->wrap_around_destination_index(destination.path_index + 4) % 13 == 0)
 		return;
 
 	if (this->controller->board->path[destination.path_index].size() == 1 && this->controller->board->path[destination.path_index][0]->home->player->team != this->team)
@@ -181,14 +176,14 @@ void Player::kill(Position source,Position destination)
 }
 bool Player::any_valid_move()
 {
-	for (int i = 0; i < this->controller->board->path.size();i++)
+	for (int i = 0; i < this->controller->board->path.size(); i++)
 	{
 		int floor = this->our_piece_index(i);
 		if (floor != -1)
 		{
 			for (auto j : this->roll_results)
 			{
-				int destination =this->controller->ludo_cabaret->wrap_around_destination_index(i+j);
+				int destination = this->controller->ludo_cabaret->wrap_around_destination_index(i + j);
 				if (this->valid_destination(destination))
 				{
 					return true;
@@ -196,14 +191,12 @@ bool Player::any_valid_move()
 			}
 		}
 	}
+	return this->is_any_valid_move_to_go_inside_home();
 
-
-	return false;
-	
 }
 bool Player::is_any_valid_move_in_local_path()
 {
-	for (int i = 0; i<this->home->local_path.size();i++)
+	for (int i = 0; i < this->home->local_path.size(); i++)
 	{
 		int floor = this->our_piece_index_local_path(i);
 		if (floor != -1)
@@ -221,9 +214,25 @@ bool Player::any_piece_inside_home()
 {
 	for (auto piece : this->home->pieces)
 	{
-		if (piece->out_of_home == false)		
+		if (piece->out_of_home == false)
 			return true;
-					
+
+	}
+	return false;
+}
+bool Player::is_any_valid_move_to_go_inside_home()
+{
+	for (int i = 0; i < this->controller->board->path.size(); i++)
+	{
+		int floor = this->our_piece_index(i);
+		if (floor != -1)
+		{
+			for (auto j : this->roll_results)
+			{
+				if (this->controller->board->path[i][floor]->can_go_inside_home(i, j))
+					return true;
+			}
+		}
 	}
 	return false;
 }
