@@ -43,22 +43,21 @@ void Ludo_Cabaret::initialize_everything()
 	controller->ludo_cabaret = this;										//Adding itself to Controller Class
 	//....................................
 
-	
+
 
 	for (int team = 0; team < number_of_teams; team++)
 	{
-		this->teams.push_back(new Team(names_of_teams(team),controller));						//Creating number_of_teams objects and pushing them into vector of teams.
+		this->teams.push_back(new Team(names_of_teams(team), controller));						//Creating number_of_teams objects and pushing them into vector of teams.
 	}
 
 	for (int player = 0, team = 0; player < number_of_players; player++, team = ((++team) % number_of_teams))
 	{
-		players.push_back(new Player(this->teams[team], player * 13,names_of_players(player), controller));
+		players.push_back(new Player(this->teams[team], player * 13, names_of_players(player), controller));
 	}
 	//...................................
 	this->board = new Board(controller);
 	srand(time(0));
 	this->turn = this->players[rand() % number_of_players];		// Generating random turn 
-	this->turn = this->players[1];
 }
 int Ludo_Cabaret::wrap_around_destination_index(int destination)
 {
@@ -68,9 +67,8 @@ void Ludo_Cabaret::play()
 {
 	while (true)
 	{
-		
 		this->controller->dice->dice_last_result = 6;
-		if (turn->arrived_pieces <number_of_pieces_per_home && turn->team->arrived_pieces<number_of_pieces_per_home*turn->team->players.size())
+		if (turn->arrived_pieces < number_of_pieces_per_home && turn->team->arrived_pieces < number_of_pieces_per_home * turn->team->players.size())
 		{
 			this->display();
 			turn->roll();
@@ -96,8 +94,7 @@ void Ludo_Cabaret::play()
 								int destination = wrap_around_destination_index(choice + turn->roll_results[dice_index]);
 								if (this->board->path[choice][floor]->can_go_inside_home(choice, turn->roll_results[dice_index]))
 								{
-									turn->home->local_path[choice + turn->roll_results[dice_index] - turn->home->home_entering_index].push_back(this->board->path[choice][floor]);
-									this->board->path[choice].erase(this->board->path[choice].begin() + floor);
+									this->board->go_inside_home({ choice,floor }, { choice + turn->roll_results[dice_index] - turn->home->home_entering_index,-1 });
 									if (choice + turn->roll_results[dice_index] - turn->home->home_entering_index == 5) turn->arrived_pieces++;
 									turn->roll_results.erase(turn->roll_results.begin() + dice_index);
 								}
@@ -158,7 +155,7 @@ void Ludo_Cabaret::display()
 {
 	draw_background();
 	//....................................
-	this->board->dice->display_dice(this->board->dice->dice_last_result, 0,{160,160});
+	this->board->dice->display_dice(this->board->dice->dice_last_result, 0, { 160,160 });
 	//....................................
 	turn->display_roll_results();
 	//....................................
@@ -171,7 +168,7 @@ void Ludo_Cabaret::display()
 }
 void Ludo_Cabaret::turn_change()
 {
-	if (turn==this->players.back())
+	if (turn == this->players.back())
 	{
 		turn = this->players.front();
 	}
@@ -191,7 +188,7 @@ void Ludo_Cabaret::print_turn()
 	turn_text.setFont(font);
 	turn_text.setCharacterSize(100);
 	turn_text.setString("TURN : ");
-	turn_text.setPosition(sf::Vector2f(1060,50));
+	turn_text.setPosition(sf::Vector2f(1060, 50));
 	this->ludo_window->draw(turn_text);
 	//.........................................
 	sf::Texture turn_box_texture;
@@ -234,7 +231,7 @@ void Ludo_Cabaret::making_leadership_board()
 	for (auto player : turn->team->players)
 		turn->team->arrived_pieces += player->arrived_pieces;
 
-	if(turn->team->arrived_pieces== number_of_pieces_per_home*turn->team->players.size())
+	if (turn->team->arrived_pieces == number_of_pieces_per_home * turn->team->players.size())
 	{
 		this->team_leadership_board.push(turn->team);
 	}
@@ -326,7 +323,7 @@ void Ludo_Cabaret::menu_board1()
 		else if (choice.row > 813 - error && choice.row < 813 + error && choice.col > 1025 - error && choice.col < 1025 + error)
 			this->number_of_players = 6;
 	} while (!(this->number_of_players >= 2 && this->number_of_players <= 6));
-	
+
 }
 void Ludo_Cabaret::menu_board2()
 {
@@ -457,7 +454,7 @@ void Ludo_Cabaret::menu_board3()
 			this->number_of_pieces_per_home = 3;
 		else if (choice.row > 813 - error && choice.row < 813 + error && choice.col > 925 - error && choice.col < 925 + error)
 			this->number_of_pieces_per_home = 4;
-	} while (!(this->number_of_pieces_per_home>=1 && this->number_of_pieces_per_home<=4));
+	} while (!(this->number_of_pieces_per_home >= 1 && this->number_of_pieces_per_home <= 4));
 
 }
 void Ludo_Cabaret::menu_leadership_board()
@@ -487,7 +484,7 @@ void Ludo_Cabaret::menu_leadership_board()
 			auto player = leadership_board.front();
 			text.setString(to_string(i + 1) + pre_name + "     " + player->name);
 			text.setPosition(sf::Vector2f(150, 210 + 130 * i));
-			player->home->pieces[0]->display({ i * 125 + 270,1200}, {60,60});
+			player->home->pieces[0]->display({ i * 125 + 270,1200 }, { 60,60 });
 			this->ludo_window->draw(text);
 			leadership_board.pop();
 		}
@@ -505,12 +502,12 @@ void Ludo_Cabaret::menu_leadership_board()
 			text.setString(to_string(i + 1) + pre_name + "     " + team->name);
 			text.setPosition(sf::Vector2f(150, 210 + 130 * i));
 			this->ludo_window->draw(text);
-			for (int j=0;j<team->players.size();j++)
-				team->players[j]->home->pieces[0]->display({i*125+270,j*120+800}, {60,60});
+			for (int j = 0; j < team->players.size(); j++)
+				team->players[j]->home->pieces[0]->display({ i * 125 + 270,j * 120 + 800 }, { 60,60 });
 			team_leadership_board.pop();
 		}
 	}
-	
+
 	//............................
 	this->ludo_window->display();
 	auto pos = get_row_col_by_click(*this->ludo_window);
@@ -551,9 +548,9 @@ Ludo_Cabaret::~Ludo_Cabaret()
 {
 	delete this->controller;
 	delete this->ludo_window;
-	for (auto team: this->teams)
+	for (auto team : this->teams)
 		delete team;
 	for (auto player : this->players)
-		delete player;	
+		delete player;
 	delete board;
 }
