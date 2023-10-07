@@ -13,6 +13,5 @@ class Controller_Class
 		Board* board{};		
 		Dice* dice{};
 	public:
-		void print();
 		Controller_Class();
 }; 
